@@ -38,9 +38,16 @@ $tasks_list = [
         'date' => 'Нет',
         'category' => $projects_list[3],
         'is_done' => false
-    ],
+    ]
 ];
 $project_index = 0;
+function count_tasks($list, $project) {
+	$categories = array_column($list, 'category');
+	$count = array_count_values($categories);
+    if (array_key_exists($project, $count)) {
+        return $count[$project];
+    } else {return '0';}
+}
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -90,7 +97,7 @@ $project_index = 0;
                         <?php while ($project_index < count($projects_list)): ?>
 													<li class="main-navigation__list-item main-navigation__list-item--active">
 														<a class="main-navigation__list-item-link" href="#"><?=$projects_list[$project_index];?></a>
-														<span class="main-navigation__list-item-count">0</span>
+														<span class="main-navigation__list-item-count"><?=count_tasks($tasks_list, $projects_list[$project_index]);?></span>
 													</li>
                             <?php $project_index++; ?>
                         <?php endwhile; ?>
