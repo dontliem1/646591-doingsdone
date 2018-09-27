@@ -39,4 +39,3 @@ $tasks_list = [
         'is_done' => false
     ]
 ];
-$project_index = 0;
