@@ -25,7 +25,8 @@
 <table class="tasks">
 
     <?php foreach ($tasks_list as $key => $task): ?>
-        <tr class="tasks__item task <?php if($task['is_done'] === true) {print ("task--completed");} ?>" <?php if($show_complete_tasks === 0 && $task['is_done'] === true) {print ("hidden");} ?>>
+        <tr class="tasks__item task <?php if($task['is_done'] === true) {print ("task--completed");}?> <?php if(check_important($task['date']) === true) {print ("task--important");}?>"
+						<?php if($show_complete_tasks === 0 && $task['is_done'] === true) {print ("hidden");} ?>>
             <td class="task__select">
                 <label class="checkbox task__checkbox">
                     <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" <?php if($task['is_done'] === true) {print ("checked");} ?>>
@@ -37,7 +38,7 @@
                 <a class="download-link" href="#"></a>
             </td>
 
-            <td class="task__date"><?=$task['date'];?></td>
+            <td class="task__date"><?php if (empty($task['date']) === true) {print 'Нет';} else {print $task['date'];} ?></td>
         </tr>
     <?php endforeach; ?>
 
