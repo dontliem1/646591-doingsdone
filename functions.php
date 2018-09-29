@@ -27,3 +27,10 @@ function include_template($name, $data) {
 
     return $result;
 }
+function check_important($date) {
+    $important = false;
+    $difference = floor((strtotime($date) - time())/3600);
+    if ((empty($date) === false) && ($difference <= 24)) {$important = true;}
+
+    return $important;
+}
