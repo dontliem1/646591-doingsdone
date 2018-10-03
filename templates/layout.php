@@ -11,7 +11,6 @@
 
 <body>
 <h1 class="visually-hidden">Дела в порядке</h1>
-
 <div class="page-wrapper">
     <div class="container container--with-sidebar">
         <header class="main-header">
@@ -28,7 +27,7 @@
                     </div>
 
                     <div class="user-menu__data">
-                        <p><?=esc($username);?></p>
+                        <p><?=esc($user);?></p>
 
                         <a href="#">Выйти</a>
                     </div>
@@ -45,8 +44,8 @@
 
                         <?php foreach ($projects_list as $project): ?>
                             <li class="main-navigation__list-item main-navigation__list-item--active">
-                                <a class="main-navigation__list-item-link" href="#"><?=esc($project);?></a>
-                                <span class="main-navigation__list-item-count"><?=count_tasks($tasks_list, $project);?></span>
+                                <a class="main-navigation__list-item-link" href="#"><?=esc($project['name']);?></a>
+                                <span class="main-navigation__list-item-count"><?=count_tasks($tasks_list, $project['id']);?></span>
                             </li>
                         <?php endforeach; ?>
 
