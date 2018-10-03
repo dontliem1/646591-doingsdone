@@ -1,4 +1,7 @@
 <?php
+$link = mysqli_connect('localhost', 'root', '', 'doingsdone');
+mysqli_set_charset($link, "utf8");
+
 require_once('functions.php');
 require_once('data.php');
 
@@ -10,7 +13,7 @@ $layout_content = include_template('layout.php',[
 		'content' => $page_content,
 		'projects_list' => $projects_list,
 		'tasks_list' => $tasks_list,
-		'username' => esc('Константин'),
+		'user' => esc($user_info['name']),
 		'title' => 'Дела в порядке'
 		]);
 print($layout_content);
