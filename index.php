@@ -12,8 +12,10 @@ $page_content = include_template('index.php',[
 $layout_content = include_template('layout.php',[
 		'content' => $page_content,
 		'projects_list' => $projects_list,
+		'tasks_list_all' => $tasks_list_all,
 		'tasks_list' => $tasks_list,
 		'user' => esc($user_info['name']),
 		'title' => 'Дела в порядке'
 		]);
+
 print($layout_content);
