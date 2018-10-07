@@ -19,7 +19,7 @@
             </a>
 
             <div class="main-header__side">
-                <a class="main-header__side-item button button--plus open-modal" href="pages/form-task.html">Добавить задачу</a>
+                <a class="main-header__side-item button button--plus open-modal" href="add.php">Добавить задачу</a>
 
                 <div class="main-header__side-item user-menu">
                     <div class="user-menu__image">
@@ -42,9 +42,10 @@
                 <nav class="main-navigation">
                     <ul class="main-navigation__list">
 
-                        <?php foreach ($projects_list as $project): ?>
+                        <?php
+												foreach ($projects_list as $project): ?>
                             <li class="main-navigation__list-item <?php if ($_GET['project'] === $project['id']) {print 'main-navigation__list-item--active';} ?>">
-                                <a class="main-navigation__list-item-link" href="/?project=<?=$project['id'];?>"><?=esc($project['name']);?></a>
+                                <a class="main-navigation__list-item-link" href="<?=make_project_link($project['id']);?>"><?=esc($project['name']);?></a>
                                 <span class="main-navigation__list-item-count"><?=count_tasks($tasks_list_all, $project['id']);?></span>
                             </li>
                         <?php endforeach; ?>
@@ -71,7 +72,7 @@
             <p>Веб-приложение для удобного ведения списка дел.</p>
         </div>
 
-        <a class="main-footer__button button button--plus" href="pages/form-task.html">Добавить задачу</a>
+        <a class="main-footer__button button button--plus" href="add.php">Добавить задачу</a>
 
         <div class="main-footer__social social">
             <span class="visually-hidden">Мы в соцсетях:</span>

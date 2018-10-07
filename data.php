@@ -1,6 +1,6 @@
 <?php
-$show_complete_tasks = rand(0, 1);
-
+$show_complete_tasks = 0;
+if (isset($_GET['show_completed'])) {$show_complete_tasks = $_GET['show_completed'];}
 $projects_list = [];
 $tasks_list_all = [];
 $tasks_list = [];
@@ -24,22 +24,22 @@ if ($link) {
         $projects_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
 
-    //Получаем список всех задач этого пользователя
-    $sql = 'SELECT * FROM tasks WHERE user_id = '.$cur_user;
+    //Получаем список всех задач этого пользователя и сортируем по новизне
+    $sql = 'SELECT * FROM tasks WHERE user_id = '.$cur_user.' ORDER BY date_created DESC';
     $result = mysqli_query($link, $sql);
     if ($result) {
         $tasks_list_all = mysqli_fetch_all($result, MYSQLI_ASSOC);
         $tasks_list =  $tasks_list_all;
     }
 
-    //При наличии параметра project, получаем список всех задач для одного проекта
+    //При наличии параметра project, получаем список всех задач для одного проекта и сортируем по новизне
     if (isset($_GET['project'])) {
         $cur_project = $_GET['project'];
         //Приводим параметр к целочисленному типу для защиты от SQL-инъекций
         settype($cur_project, 'integer');
         $project_ids = array_column($projects_list, 'id');
 
-        $sql = 'SELECT * FROM tasks WHERE user_id = '.$cur_user.' AND project_id= '.$cur_project;
+        $sql = 'SELECT * FROM tasks WHERE user_id = '.$cur_user.' AND project_id= '.$cur_project.' ORDER BY date_created DESC';
         $result = mysqli_query($link, $sql);
         if ($result) {
             $tasks_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
