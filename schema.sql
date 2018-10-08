@@ -22,8 +22,8 @@ date_created TIMESTAMP,
 date_done TIMESTAMP,
 status BOOL,
 name VARCHAR(128),
-file_path VARCHAR(128),
-deadline DATETIME,
+file_path VARCHAR(128) DEFAULT NULL,
+deadline DATE DEFAULT NULL,
 user_id INT,
 project_id INT
 );

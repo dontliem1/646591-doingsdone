@@ -1,5 +1,4 @@
 <h2 class="content__main-heading">Список задач</h2>
-
 <form class="search-form" action="index.php" method="post">
     <input class="search-form__input" type="text" name="" value="" placeholder="Поиск по задачам">
 
@@ -26,18 +25,16 @@
 
     <?php foreach ($tasks_list as $key => $task): ?>
         <tr class="tasks__item task <?php if($task['status']) {print ("task--completed");}?> <?php if(check_important($task['deadline'])) {print ("task--important");}?>"
-						<?php if($show_complete_tasks === 0 && $task['status']) {print ("hidden");} ?>>
+						<?php if(!$show_complete_tasks && $task['status']) {print ("hidden");} ?>>
             <td class="task__select">
                 <label class="checkbox task__checkbox">
                     <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" <?php if($task['status']) {print ("checked");} ?>>
                     <span class="checkbox__text"><?=esc($task['name']);?></span>
                 </label>
             </td>
-
-            <td class="task__file">
-                <a class="download-link" href="#"></a>
-            </td>
-
+					<td class="task__file">
+							<?php if($task['file_path']) {print ('<a class="download-link" href="'.esc($task['file_path']).'"></a>');}?>
+					</td>
             <td class="task__date"><?php if (empty($task['deadline'])) {print 'Нет';} else {print date('d.m.Y', strtotime($task['deadline']));} ?></td>
         </tr>
     <?php endforeach; ?>
