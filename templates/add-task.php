@@ -30,16 +30,16 @@
 
 	<div class="form__row">
 		<label class="form__label" for="preview">Файл</label>
-
 		<div class="form__input-file">
+        <?php $classname = isset($errors['file']) ? "form__input--error" : "";?>
 			<input class="visually-hidden" type="file" name="preview" id="preview" value="">
-
-			<label class="button button--transparent" for="preview">
+			<label class="button button--transparent <?=$classname;?>" for="preview">
 				<span>Выберите файл</span>
 			</label>
 		</div>
+      <?php if (isset($errors['file'])) {print ('<p class="form_message"><span class="form__message error-message">'.$errors['file'].'</span></p>');}?>
 	</div>
-
+    <?php if (!empty($errors)) {print ('<div class="form__row"><p class="form_message"><span class="form__message error-message">Пожалуйста, исправьте ошибки в форме</span></p></div>');}?>
 	<div class="form__row form__row--controls">
 		<input class="button" type="submit" name="" value="Добавить">
 	</div>

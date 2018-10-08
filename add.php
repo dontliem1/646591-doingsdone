@@ -25,7 +25,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     //Проверяем формат даты
     if (!empty($task['date']) && !validate_date($task['date'])) {
         $errors['date'] = 'Введите дату в формате дд.мм.гггг';
+    }
 
+    if (isset($_FILES['preview']['name'])) {
+        $tmp_name = $_FILES['preview']['tmp_name'];
+        $path = $_FILES['preview']['name'];
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $file_type = finfo_file($finfo, $tmp_name);
+        $types = array("image/jpeg", "image/png", "text/plain");
+        if (!in_array($file_type, $types)) {
+            $errors['file'] = 'Загрузите картинку или текстовый файл';
+        }
+        else {
+            move_uploaded_file($tmp_name, '/'.$path);
+            $task['path'] = $path;
+        }
     }
 
     //Если проверки не сработали, показываем ошибки, сохраняя введёные данные
