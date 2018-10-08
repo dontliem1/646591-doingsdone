@@ -39,8 +39,8 @@
 		</div>
       <?php if (isset($errors['file'])) {print ('<p class="form_message"><span class="form__message error-message">'.$errors['file'].'</span></p>');}?>
 	</div>
-    <?php if (!empty($errors)) {print ('<div class="form__row"><p class="form_message"><span class="form__message error-message">Пожалуйста, исправьте ошибки в форме</span></p></div>');}?>
 	<div class="form__row form__row--controls">
+<?php if (!empty($errors)) {print ('<p class="error-message">Пожалуйста, исправьте ошибки в форме</p>');}?>
 		<input class="button" type="submit" name="" value="Добавить">
 	</div>
 </form>
