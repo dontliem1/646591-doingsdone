@@ -1,6 +1,6 @@
 <h2 class="content__main-heading">Регистрация аккаунта</h2>
 <? if (isset($errors['sql'])) {print ($errors['sql']);}?>
-<form class="form"  action="" method="post" enctype="multipart/form-data">
+<form class="form"  action="" method="post">
 	<div class="form__row">
 		<label class="form__label" for="email">E-mail <sup>*</sup></label>
 		<?php $classname = isset($errors['email']) ? "form__input--error" : "";
