@@ -81,12 +81,13 @@ else {
 }
 
 $layout_content = include_template('layout.php',[
-		'content' => $page_content,
-		'projects_list' => $projects_list,
-		'tasks_list_all' => $tasks_list_all,
-		'tasks_list' => $tasks_list,
-		'user' => esc($user_info['name']),
-		'title' => 'Добавление задачи — Дела в порядке'
-		]);
+    'content' => $page_content,
+    'authorized' => $authorized,
+    'projects_list' => $projects_list,
+    'tasks_list_all' => $tasks_list_all,
+    'tasks_list' => $tasks_list,
+    'user' => esc($user_info['name']),
+    'title' => 'Добавление задачи — Дела в порядке'
+    ]);
 
 print($layout_content);

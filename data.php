@@ -6,6 +6,8 @@ $tasks_list_all = [];
 $tasks_list = [];
 $user_info = [];
 
+//Проверяем авторизацию
+$authorized = 0;
 //Выбираем пользователя по id
 $cur_user = 1;
 

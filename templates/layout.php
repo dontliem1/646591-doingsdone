@@ -19,42 +19,43 @@
             </a>
 
             <div class="main-header__side">
+							<?php if ($authorized): ?>
                 <a class="main-header__side-item button button--plus open-modal" href="add.php">Добавить задачу</a>
-
                 <div class="main-header__side-item user-menu">
                     <div class="user-menu__image">
                         <img src="img/user-pic.jpg" width="40" height="40" alt="Пользователь">
                     </div>
-
                     <div class="user-menu__data">
                         <p><?=esc($user);?></p>
-
                         <a href="#">Выйти</a>
                     </div>
                 </div>
+							<?php else: ?>
+								<a class="main-header__side-item button button--transparent" href="login.php">Войти</a>
+							<?php endif; ?>
             </div>
         </header>
 
         <div class="content">
             <section class="content__side">
+                <?php if ($authorized): ?>
                 <h2 class="content__side-heading">Проекты</h2>
-
                 <nav class="main-navigation">
                     <ul class="main-navigation__list">
-
-                        <?php
-												foreach ($projects_list as $project): ?>
+                        <?php foreach ($projects_list as $project): ?>
                             <li class="main-navigation__list-item <?php if ($_GET['project'] === $project['id']) {print 'main-navigation__list-item--active';} ?>">
                                 <a class="main-navigation__list-item-link" href="<?=make_project_link($project['id']);?>"><?=esc($project['name']);?></a>
                                 <span class="main-navigation__list-item-count"><?=count_tasks($tasks_list_all, $project['id']);?></span>
                             </li>
                         <?php endforeach; ?>
-
                     </ul>
                 </nav>
-
                 <a class="button button--transparent button--plus content__side-button"
                     href="pages/form-project.html" target="project_add">Добавить проект</a>
+                <?php else: ?>
+									<p class="content__side-info">Если у вас уже есть аккаунт, авторизуйтесь на сайте</p>
+									<a class="button button--transparent content__side-button" href="login.php">Войти</a>
+                <?php endif; ?>
             </section>
 
             <main class="content__main">
@@ -72,7 +73,7 @@
             <p>Веб-приложение для удобного ведения списка дел.</p>
         </div>
 
-        <a class="main-footer__button button button--plus" href="add.php">Добавить задачу</a>
+        <?php if ($authorized) print('<a class="main-footer__button button button--plus" href="add.php">Добавить задачу</a>'); ?>
 
         <div class="main-footer__social social">
             <span class="visually-hidden">Мы в соцсетях:</span>
