@@ -1,9 +1,36 @@
 <?php
+
+session_start();
+if (!isset($_SESSION['user'])) {
+    header('HTTP/1.0 403 Forbidden');
+    exit();
+}
+
 $link = mysqli_connect('localhost', 'root', '', 'doingsdone');
 mysqli_set_charset($link, "utf8");
 
+$projects_list = [];
+$tasks_list_all = [];
+
 require_once('functions.php');
-require_once('data.php');
+
+if ($link) {
+    $cur_user = $_SESSION['user']['id'];
+
+    //Получаем список всех проектов этого пользователя
+    $sql = 'SELECT * FROM projects WHERE user_id = '.$_SESSION['user']['id'];
+    $result = mysqli_query($link, $sql);
+    if ($result) {
+        $projects_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+
+    //Получаем список всех задач этого пользователя
+    $sql = 'SELECT * FROM tasks WHERE user_id = '.$_SESSION['user']['id'];
+    $result = mysqli_query($link, $sql);
+    if ($result) {
+        $tasks_list_all = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $task = $_POST;
@@ -75,18 +102,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 else {
-    $page_content = include_template('add-task.php',[
-        'projects_list' => $projects_list
-    ]);
+    $page_content = include_template('add-task.php',['projects_list' => $projects_list]);
 }
 
 $layout_content = include_template('layout.php',[
     'content' => $page_content,
-    'authorized' => $authorized,
     'projects_list' => $projects_list,
     'tasks_list_all' => $tasks_list_all,
-    'tasks_list' => $tasks_list,
-    'user' => esc($user_info['name']),
     'title' => 'Добавление задачи — Дела в порядке'
     ]);
 

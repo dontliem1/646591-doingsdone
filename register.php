@@ -3,10 +3,32 @@ $link = mysqli_connect('localhost', 'root', '', 'doingsdone');
 mysqli_set_charset($link, "utf8");
 
 require_once('functions.php');
-require_once('data.php');
 
+$projects_list = [];
+$tasks_list_all = [];
 $form = [];
 $errors = [];
+
+session_start();
+
+if ($link && isset($_SESSION['user'])) {
+    $cur_user = $_SESSION['user']['id'];
+
+    //Получаем список всех проектов этого пользователя
+    $sql = 'SELECT * FROM projects WHERE user_id = '.$_SESSION['user']['id'];
+    $result = mysqli_query($link, $sql);
+    if ($result) {
+        $projects_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+
+    //Получаем список всех задач этого пользователя
+    $sql = 'SELECT * FROM tasks WHERE user_id = '.$_SESSION['user']['id'];
+    $result = mysqli_query($link, $sql);
+    if ($result) {
+        $tasks_list_all = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $form = $_POST;
@@ -31,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt = db_get_prepare_stmt($link, $sql, [$form['email'], $form['name'], $password]);
         $res = mysqli_stmt_execute($stmt);
         if ($res) {
-            header("Location: /");
+            header("Location: /auth.php");
             exit();
         } else {$errors['sql'] = mysqli_error($link);}
     }
@@ -41,11 +63,8 @@ $page_content = include_template('register.php', ['errors' => $errors, 'form' =>
 
 $layout_content = include_template('layout.php',[
     'content' => $page_content,
-    'authorized' => $authorized,
     'projects_list' => $projects_list,
     'tasks_list_all' => $tasks_list_all,
-    'tasks_list' => $tasks_list,
-    'user' => esc($user_info['name']),
     'title' => 'Регистрация — Дела в порядке',
 ]);
 

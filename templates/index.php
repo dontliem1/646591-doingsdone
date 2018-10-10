@@ -15,7 +15,7 @@
 
     <label class="checkbox">
         <input class="checkbox__input visually-hidden show_completed"
-            <?php if ($show_complete_tasks) {print ("checked");}?>
+            <?php if (isset($_GET['show_completed']) && $_GET['show_completed'] === 1) {print ("checked");}?>
             type="checkbox">
         <span class="checkbox__text">Показывать выполненные</span>
     </label>
@@ -25,7 +25,7 @@
 
     <?php foreach ($tasks_list as $key => $task): ?>
         <tr class="tasks__item task <?php if($task['status']) {print ("task--completed");}?> <?php if(check_important($task['deadline'])) {print ("task--important");}?>"
-						<?php if(!$show_complete_tasks && $task['status']) {print ("hidden");} ?>>
+						<?php if(!isset($_GET['show_completed']) && $task['status']) {print ("hidden");} ?>>
             <td class="task__select">
                 <label class="checkbox task__checkbox">
                     <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" <?php if($task['status']) {print ("checked");} ?>>

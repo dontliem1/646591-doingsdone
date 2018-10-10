@@ -33,7 +33,7 @@ function include_template($name, $data) {
 function make_project_link($id) {
     $url = "$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
     $url_parts = parse_url($url);
-    $result = '?project=' . $id;
+    $result = 'http://'.$_SERVER['HTTP_HOST'].'/index.php?project=' . $id;
     if (isset($url_parts['query'])) {parse_str($url_parts['query'], $params);
 
         $params['project'] = $id;
