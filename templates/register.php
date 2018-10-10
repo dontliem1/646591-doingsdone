@@ -1,9 +1,5 @@
 <h2 class="content__main-heading">Регистрация аккаунта</h2>
 <? if (isset($errors['sql'])) {print ($errors['sql']);}?>
-<?php
-    $url = "$_SERVER[HTTP_HOST]";
-    $url_parts = parse_url($url);
-    var_dump(parse_url($url)); ?>
 <form class="form"  action="" method="post">
 	<div class="form__row">
 		<label class="form__label" for="email">E-mail <sup>*</sup></label>
