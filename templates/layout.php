@@ -44,14 +44,14 @@
                     <ul class="main-navigation__list">
                         <?php foreach ($projects_list as $project): ?>
                             <li class="main-navigation__list-item <?php if (isset($_GET['project']) && ($_GET['project'] === $project['id'])) {print 'main-navigation__list-item--active';} ?>">
-                                <a class="main-navigation__list-item-link" href="<?=make_project_link($project['id']);?>"><?=esc($project['name']);?></a>
+                                <a class="main-navigation__list-item-link" href="<?=make_link('project', $project['id']);?>"><?=esc($project['name']);?></a>
                                 <span class="main-navigation__list-item-count"><?=count_tasks($tasks_list_all, $project['id']);?></span>
                             </li>
                         <?php endforeach; ?>
                     </ul>
                 </nav>
                 <a class="button button--transparent button--plus content__side-button"
-                    href="pages/form-project.html" target="project_add">Добавить проект</a>
+                    href="add-project.php" target="project_add">Добавить проект</a>
                 <?php else: ?>
 									<p class="content__side-info">Если у вас уже есть аккаунт, авторизуйтесь на сайте</p>
 									<a class="button button--transparent content__side-button" href="auth.php">Войти</a>

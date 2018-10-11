@@ -17,16 +17,12 @@ if ($link && isset($_SESSION['user'])) {
     //Получаем список всех проектов этого пользователя
     $sql = 'SELECT * FROM projects WHERE user_id = '.$_SESSION['user']['id'];
     $result = mysqli_query($link, $sql);
-    if ($result) {
-        $projects_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    }
+    if ($result) {$projects_list = mysqli_fetch_all($result, MYSQLI_ASSOC);}
 
     //Получаем список всех задач этого пользователя
     $sql = 'SELECT * FROM tasks WHERE user_id = '.$_SESSION['user']['id'];
     $result = mysqli_query($link, $sql);
-    if ($result) {
-        $tasks_list_all = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    }
+    if ($result) {$tasks_list_all = mysqli_fetch_all($result, MYSQLI_ASSOC);}
 }
 
 
@@ -37,13 +33,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (empty($form['password'])) {$errors['password'] = 'Придумайте пароль';}
 
-    if (empty($form['email']) || !filter_var($form['email'], FILTER_VALIDATE_EMAIL)) {
-        $errors['email'] = 'Введите действительный адрес электронной почты';
-    }
+    if (empty($form['email']) || !filter_var($form['email'], FILTER_VALIDATE_EMAIL)) {$errors['email'] = 'Введите действительный адрес электронной почты';}
     else {
-    $email = mysqli_real_escape_string($link, $form['email']);
-    $sql = "SELECT id FROM users WHERE email = '$email'";
-    $res = mysqli_query($link, $sql);
+        $email = mysqli_real_escape_string($link, $form['email']);
+        $sql = "SELECT id FROM users WHERE email = '$email'";
+        $res = mysqli_query($link, $sql);
         if (mysqli_num_rows($res) > 0) {$errors['email'] = 'Пользователь с этим email уже зарегистрирован';}
     }
 

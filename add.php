@@ -37,51 +37,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $errors = [];
 
     //Проверяем заполнено ли название задачи
-    if (empty($task['name'])) {
-        $errors['name'] = 'Укажите название задачи';
-    }
+    if (empty($task['name'])) {$errors['name'] = 'Укажите название задачи';}
 
     //Проверяем выбран ли проект и существует ли он
-    if (empty($task['project'])) {
-        $errors['project'] = 'Укажите проект';
-    }
-    elseif (!in_array($task['project'], array_column($projects_list, 'id'))) {
-        $errors['project'] = 'Выберите существующий проект';
-    }
+    if (empty($task['project'])) {$errors['project'] = 'Укажите проект';}
+    elseif (!in_array($task['project'], array_column($projects_list, 'id'))) {$errors['project'] = 'Выберите существующий проект';}
 
-    //Проверяем формат даты
-    if (!empty($task['date']) && !validate_date($task['date'])) {
-        $errors['date'] = 'Введите дату в формате дд.мм.гггг';
-    }
+    //Проверяем формат даты при наличии
+    if (!empty($task['date']) && !validate_date($task['date'])) {$errors['date'] = 'Введите дату в формате дд.мм.гггг';}
 
-    if (isset($_FILES['preview']['name'])) {
+    //Проверяем тип загруженного файла при наличии
+    if (!empty($_FILES['preview']['name'])) {
         $tmp_name = $_FILES['preview']['tmp_name'];
-        $path = $_FILES['preview']['name'];
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $file_type = finfo_file($finfo, $tmp_name);
         $types = array("image/jpeg", "image/png", "text/plain");
-        if (!in_array($file_type, $types)) {
-            $errors['file'] = 'Загрузите картинку или текстовый файл';
-        }
-        else {
-            move_uploaded_file($tmp_name, '/'.$path);
-            $task['path'] = $path;
-        }
+        if (!in_array($file_type, $types)) {$errors['file'] = 'Загрузите картинку или текстовый файл';}
     }
 
-    //Если проверки не сработали, показываем ошибки, сохраняя введёные данные
-    if (count($errors)) {
-        $page_content = include_template('add-task.php', ['projects_list' => $projects_list, 'task' => $task, 'errors' => $errors]);
-    }
+    //Если проверки сработали отрицательно, показываем ошибки, сохраняя введёные данные
+    if (count($errors)) {$page_content = include_template('add-task.php', ['projects_list' => $projects_list, 'task' => $task, 'errors' => $errors]);}
     else {
         //Если пользователь загрузил файл, перемещаем его в корень сайта
-        if (isset($_FILES['preview']['name'])) {
-            $tmp_name = $_FILES['preview']['tmp_name'];
+        if (isset($tmp_name)) {
             $path = $_FILES['preview']['name'];
-
             move_uploaded_file($tmp_name, '/'.$path);
             $task['path'] = $path;
-        }
+        } else {$task['path'] = '';}
 
         //Генерируем SQL-запрос в зависимости от наличия заполненной даты
         if (empty($task['date'])) {

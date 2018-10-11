@@ -7,15 +7,15 @@
 
 <div class="tasks-controls">
     <nav class="tasks-switch">
-        <a href="/" class="tasks-switch__item tasks-switch__item--active">Все задачи</a>
-        <a href="/" class="tasks-switch__item">Повестка дня</a>
-        <a href="/" class="tasks-switch__item">Завтра</a>
-        <a href="/" class="tasks-switch__item">Просроченные</a>
+        <a href="<?=make_link('date', false);?>" class="tasks-switch__item <?php if (!isset($_GET['date'])) {print ("tasks-switch__item--active");}?>">Все задачи</a>
+        <a href="<?=make_link('date', 'today');?>" class="tasks-switch__item <?php if (isset($_GET['date']) && $_GET['date'] === 'today') {print ("tasks-switch__item--active");}?>">Повестка дня</a>
+        <a href="<?=make_link('date', 'tomorrow');?>" class="tasks-switch__item <?php if (isset($_GET['date']) && $_GET['date'] === 'tomorrow') {print ("tasks-switch__item--active");}?>">Завтра</a>
+        <a href="<?=make_link('date', 'past');?>" class="tasks-switch__item <?php if (isset($_GET['date']) && $_GET['date'] === 'past') {print ("tasks-switch__item--active");}?>">Просроченные</a>
     </nav>
 
     <label class="checkbox">
         <input class="checkbox__input visually-hidden show_completed"
-            <?php if (isset($_GET['show_completed']) && $_GET['show_completed'] === 1) {print ("checked");}?>
+            <?php if (isset($_GET['show_completed']) && $_GET['show_completed']) {print ("checked");}?>
             type="checkbox">
         <span class="checkbox__text">Показывать выполненные</span>
     </label>
@@ -24,11 +24,11 @@
 <table class="tasks">
 
     <?php foreach ($tasks_list as $key => $task): ?>
-        <tr class="tasks__item task <?php if($task['status']) {print ("task--completed");}?> <?php if(check_important($task['deadline'])) {print ("task--important");}?>"
-						<?php if(!isset($_GET['show_completed']) && $task['status']) {print ("hidden");} ?>>
+        <tr class="tasks__item task <?php if($task['status']) {print ("task--completed");}?> <?php if(check_important($task['deadline']) && !$task['status']) {print ("task--important");}?>"
+						<?php if((!isset($_GET['show_completed']) || !$_GET['show_completed']) && $task['status'] || filter_date($task['deadline'], $task['date_done'])) {print ("hidden");} ?>>
             <td class="task__select">
                 <label class="checkbox task__checkbox">
-                    <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" <?php if($task['status']) {print ("checked");} ?>>
+                    <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="<?=$task['id'];?>" <?php if($task['status']) {print ("checked");} ?>>
                     <span class="checkbox__text"><?=esc($task['name']);?></span>
                 </label>
             </td>
