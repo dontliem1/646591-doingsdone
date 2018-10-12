@@ -6,6 +6,7 @@ $page_content = include_template('guest.php',[]);
 $hide_aside = true;
 
 if ($link && isset($_SESSION['user'])) {
+    $hide_aside = null;
     //При наличии параметра project, получаем список всех задач для одного проекта и сортируем по новизне
     if (isset($_GET['project'])) {
         $project_ids = array_column($projects_list, 'id');
