@@ -9,10 +9,10 @@
     <link rel="stylesheet" href="css/flatpickr.min.css">
 </head>
 
-<body>
+<body<?php if (isset($hide_aside)) {print ' class="body-background"';} ?>>
 <h1 class="visually-hidden">Дела в порядке</h1>
 <div class="page-wrapper">
-    <div class="container container--with-sidebar">
+    <div class="container <?php if (!isset($hide_aside)) {print 'container--with-sidebar';} ?>">
         <header class="main-header">
             <a href="/">
                 <img src="img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
@@ -37,7 +37,7 @@
         </header>
 
         <div class="content">
-            <section class="content__side">
+            <section class="content__side" <?php if (isset($hide_aside)) {print 'hidden';} ?>>
                 <?php if (isset($_SESSION['user'])): ?>
                 <h2 class="content__side-heading">Проекты</h2>
                 <nav class="main-navigation">
