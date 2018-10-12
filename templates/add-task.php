@@ -4,7 +4,7 @@
 	<div class="form__row">
 		<label class="form__label" for="name">Название <sup>*</sup></label>
 		<?php $classname = isset($errors['name']) ? "form__input--error" : "";
-      $value = isset($task['name']) ? $task['name'] : ""; ?>
+      $value = isset($form['name']) ? $form['name'] : ""; ?>
 		<input class="form__input <?=$classname;?>" type="text" name="name" id="name" value="<?=$value;?>" placeholder="Введите название">
 		<?php if (isset($errors['name'])) {print ('<p class="form_message"><span class="form__message error-message">'.$errors['name'].'</span></p>');}?>
 	</div>
@@ -23,7 +23,7 @@
 	<div class="form__row">
 		<label class="form__label" for="date">Дата выполнения</label>
       <?php $classname = isset($errors['date']) ? "form__input--error" : "";
-      $value = isset($task['date']) ? $task['date'] : ""; ?>
+      $value = isset($form['date']) ? $form['date'] : ""; ?>
 		<input class="form__input form__input--date <?=$classname;?>" type="date" name="date" id="date" value="<?=$value;?>" placeholder="Введите дату в формате ДД.ММ.ГГГГ" maxlength="10">
 		<?php if (isset($errors['date'])) {print ('<p class="form_message"><span class="form__message error-message">'.$errors['date'].'</span></p>');}?>
 	</div>

@@ -1,13 +1,5 @@
 <?php
-$link = mysqli_connect('localhost', 'root', '', 'doingsdone');
-mysqli_set_charset($link, "utf8");
-
-session_start();
-require_once('functions.php');
-
-$projects_list = [];
-$form = [];
-$errors = [];
+require_once('init.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $form = $_POST;
@@ -25,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $user = $res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : null;
 
-    if (!count($errors) and $user) {
+    if (empty($errors) && $user) {
         if (!password_verify($form['password'], $user['password'])) {
             $errors['password'] = 'Неверный пароль';
         }
@@ -34,19 +26,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errors['email'] = 'Такой пользователь не найден';
     }
 
-    if (count($errors)) {
-        $page_content = include_template('auth.php', ['form' => $form, 'errors' => $errors]);
-    }
-    else {
+    if (empty($errors)) {
         $_SESSION['user'] = $user;
         header("Location: /");
         exit();
     }
 }
-else {
-    if (isset($_SESSION['user'])) {header("Location: /");}
-    else {$page_content = include_template('auth.php', []);}
-}
+
+$page_content = include_template('auth.php', [
+    'errors' => $errors,
+    'form' => $form
+]);
 
 $layout_content = include_template('layout.php',[
     'content' => $page_content,

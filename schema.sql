@@ -23,7 +23,7 @@ date_done TIMESTAMP,
 status BOOL,
 name VARCHAR(128),
 file_path VARCHAR(128) DEFAULT NULL,
-deadline DATE DEFAULT NULL,
+deadline DATE NULL DEFAULT NULL,
 user_id INT,
 project_id INT
 );

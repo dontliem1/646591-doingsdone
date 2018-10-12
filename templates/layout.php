@@ -9,10 +9,10 @@
     <link rel="stylesheet" href="css/flatpickr.min.css">
 </head>
 
-<body>
+<body<?php if (isset($hide_aside)) {print ' class="body-background"';} ?>>
 <h1 class="visually-hidden">Дела в порядке</h1>
 <div class="page-wrapper">
-    <div class="container container--with-sidebar">
+    <div class="container <?php if (!isset($hide_aside)) {print 'container--with-sidebar';} ?>">
         <header class="main-header">
             <a href="/">
                 <img src="img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
@@ -37,21 +37,21 @@
         </header>
 
         <div class="content">
-            <section class="content__side">
+            <section class="content__side" <?php if (isset($hide_aside)) {print 'hidden';} ?>>
                 <?php if (isset($_SESSION['user'])): ?>
                 <h2 class="content__side-heading">Проекты</h2>
                 <nav class="main-navigation">
                     <ul class="main-navigation__list">
                         <?php foreach ($projects_list as $project): ?>
                             <li class="main-navigation__list-item <?php if (isset($_GET['project']) && ($_GET['project'] === $project['id'])) {print 'main-navigation__list-item--active';} ?>">
-                                <a class="main-navigation__list-item-link" href="<?=make_project_link($project['id']);?>"><?=esc($project['name']);?></a>
+                                <a class="main-navigation__list-item-link" href="<?=make_link('project', $project['id']);?>"><?=esc($project['name']);?></a>
                                 <span class="main-navigation__list-item-count"><?=count_tasks($tasks_list_all, $project['id']);?></span>
                             </li>
                         <?php endforeach; ?>
                     </ul>
                 </nav>
                 <a class="button button--transparent button--plus content__side-button"
-                    href="pages/form-project.html" target="project_add">Добавить проект</a>
+                    href="add-project.php" target="project_add">Добавить проект</a>
                 <?php else: ?>
 									<p class="content__side-info">Если у вас уже есть аккаунт, авторизуйтесь на сайте</p>
 									<a class="button button--transparent content__side-button" href="auth.php">Войти</a>
