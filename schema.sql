@@ -27,4 +27,4 @@ deadline DATE NULL DEFAULT NULL,
 user_id INT,
 project_id INT
 );
-CREATE INDEX task_name ON tasks(name);
+CREATE FULLTEXT INDEX task_search ON tasks(name);

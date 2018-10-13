@@ -6,7 +6,7 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $form = $_POST;
 
     //Проверяем заполнено ли название задачи
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (empty($form['date'])) {
         $form['date'] = null;
     }
-    elseif (!validate_date($form['date'])) {
+    elseif ($form['date'] !== date('Y-m-d', strtotime($date))) {
         $errors['date'] = 'Введите дату в формате дд.мм.гггг';
     }
 

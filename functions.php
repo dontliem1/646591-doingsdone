@@ -1,36 +1,63 @@
 <?php
-//Функция для подсчёта задач в проекте
+/**
+ * Высчитывает количество задач в проекте
+ *
+ * @param array $list Массив всех задач с данными
+ * @param int $project Индекс проекта
+ *
+ * @return int Количество задач в проекте
+ */
 function count_tasks($list, $project) {
     $categories = array_column($list, 'project_id');
     $count = array_count_values($categories);
+    $result = 0;
+
     if (array_key_exists($project, $count)) {
-        return $count[$project];
+        $result = $count[$project];
     }
-    return '0';
+
+    return $result;
 }
-//Функция для фильтрации данных
+/**
+ * Фильтрует введённые даные
+ *
+ * @param string $str Входная строка
+ *
+ * @return string Отфильтрованная строка
+ */
 function esc($str) {
     $text = htmlspecialchars($str);
     return $text;
 }
-//Функция для включения шаблона в вёрстку с передачей параметров
+/**
+ * Включает шаблон в вёрстку и передаёт параметры
+ *
+ * @param string $name Имя файла с шаблоном
+ * @param array $data Ассоциативный массив параметров
+ *
+ * @return string Содержимое страницы
+ */
 function include_template($name, $data) {
     $name = 'templates/' . $name;
     $result = '';
 
-    if (!file_exists($name)) {
-        return $result;
+    if (file_exists($name)) {
+        ob_start();
+        extract($data);
+        require($name);
+        $result = ob_get_clean();
     }
-
-    ob_start();
-    extract($data);
-    require($name);
-
-    $result = ob_get_clean();
 
     return $result;
 }
-//Функция для генерации ссылок с параметрами
+/**
+ * Создаёт ссылку с параметром, учитывая существующие параметры в адресной строке
+ *
+ * @param $parameter string Имя параметра
+ * @param string, int, false $value Значение параметра. Если false, то параметр нужно удалить
+ *
+ * @return string Сгенерированная ссылка
+ */
 function make_link($parameter, $value) {
     $url = "$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
     $url_parts = parse_url($url);
@@ -55,7 +82,13 @@ function make_link($parameter, $value) {
 
     return $result;
 }
-//Функция для проверки срока истечения задачи
+/**
+ * Возвращает истину, если задача является важной
+ *
+ * @param $date string Дедлайн задачи
+ *
+ * @return bool Булево значение, указывающее отмечать ли задачу важной
+ */
 function check_important($date) {
     $important = false;
     $difference = floor((strtotime($date) - time())/3600);
@@ -64,10 +97,16 @@ function check_important($date) {
     }
     return $important;
 }
-//Функция для фильтрации задач
+/**
+ * Возвращает истину, если задача не входит в существующий в существующий get фильтр
+ *
+ * @param $date string Дедлайн задачи
+ * @param $done string Время выполнения задачи
+ *
+ * @return bool Булево значение, указывающее прятать ли задачу в выдаче
+ */
 function filter_date($date, $done) {
     $result = false;
-    //При наличии параметра date, фильтруем задачи соответствующим образом
     if (isset($_GET['date'])) {
         $today = date('Y-m-d');
         $tomorrow = date('Y-m-d', mktime(0,0, 0, date("m"), date("d")+1, date("Y")));
@@ -77,16 +116,11 @@ function filter_date($date, $done) {
             //Прячем все задачи, кроме завтрашних
             ($_GET['date'] === 'tomorrow' && $date !== $tomorrow) ||
             //Прячем задачи с пустым или ненаступившим дедлайном, или задачи, выполненные в срок
-            ($_GET['date'] === 'past' && (empty($date) || $date > $yesterday || (!empty($done) && strtotime($done) < (strtotime($date) + 86400))))
-        ) {
+            ($_GET['date'] === 'past' && (empty($date) || $date > $yesterday || (!empty($done) && strtotime($done) < (strtotime($date) + 86400))))) {
             $result = true;
         }
     }
     return $result;
-}
-//Функция для проверки формата даты
-function validate_date($date, $format= 'Y-m-d'){
-    return $date === date($format, strtotime($date));
 }
 /**
  * Создает подготовленное выражение на основе готового SQL запроса и переданных данных
