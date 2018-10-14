@@ -7,6 +7,7 @@ $hide_aside = true;
 
 if ($link && isset($_SESSION['user'])) {
     $hide_aside = null;
+    $cur_project = '';
     //При наличии параметра project, получаем список всех задач для одного проекта и сортируем по новизне
     if (isset($_GET['project'])) {
         $project_ids = array_column($projects_list, 'id');
@@ -21,7 +22,7 @@ if ($link && isset($_SESSION['user'])) {
             exit();
         }
 
-        $sql = 'SELECT * FROM tasks WHERE user_id = '.$_SESSION['user']['id'].' AND project_id= '.$cur_project.' ORDER BY date_created DESC';
+        $sql = 'SELECT * FROM tasks WHERE user_id = '.$_SESSION['user']['id'].' AND project_id = '.$cur_project.' ORDER BY date_created DESC';
         $result = mysqli_query($link, $sql);
         if ($result) {
             $tasks_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -41,7 +42,7 @@ if ($link && isset($_SESSION['user'])) {
         //Если task_id пуст, либо если по этому id у пользователя не нашли ни одной задачи, то вместо содержимого страницы возвращаем код ответа 404
         if (!in_array($task_id, $task_ids) || empty($task_id)) {
             header("HTTP/1.1 404 Not Found");
-            die();
+            exit();
         }
 
         if ($status) {
@@ -50,10 +51,32 @@ if ($link && isset($_SESSION['user'])) {
         else {
             $sql = 'UPDATE tasks SET status = 0, date_done = NULL WHERE id = '.$task_id;
         }
+
         $result = mysqli_query($link, $sql);
         if ($result) {
             header('Location: ' . $_SERVER['HTTP_REFERER']);
             exit();
+        }
+    }
+
+    //При наличии параметра поиска показываем результаты
+    if (isset($_GET['q'])) {
+        $search = trim($_GET['q']);
+
+        if (!empty($search)) {
+            $sql = 'SELECT * FROM tasks WHERE user_id = '.$_SESSION['user']['id'].' AND MATCH (name) AGAINST (?)';
+        }
+        //Если поиск происходит внутри проекта, показываем результаты только из него
+        if (!empty($cur_project) && !empty($search)) {
+            $sql = 'SELECT * FROM tasks WHERE user_id = '.$_SESSION['user']['id'].' AND project_id = '.$cur_project.' AND MATCH (name) AGAINST (?)';
+        }
+
+        $stmt = db_get_prepare_stmt($link, $sql, [$search]);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+
+        if ($result) {
+            $tasks_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
         }
     }
 

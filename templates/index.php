@@ -1,6 +1,6 @@
 <h2 class="content__main-heading">Список задач</h2>
-<form class="search-form" action="index.php" method="post">
-    <input class="search-form__input" type="text" name="" value="" placeholder="Поиск по задачам">
+<form class="search-form" action="" method="GET">
+    <input class="search-form__input" type="text" name="q" value="" placeholder="Поиск по задачам">
 
     <input class="search-form__submit" type="submit" name="" value="Искать">
 </form>
@@ -20,7 +20,7 @@
         <span class="checkbox__text">Показывать выполненные</span>
     </label>
 </div>
-
+<?php if (!empty($tasks_list)): ?>
 <table class="tasks">
 
     <?php foreach ($tasks_list as $key => $task): ?>
@@ -40,3 +40,7 @@
     <?php endforeach; ?>
 
 </table>
+
+<?php elseif (isset($_GET['q'])): ?>
+<p>Ничего не найдено по вашему запросу.</p>
+<?php endif; ?>
